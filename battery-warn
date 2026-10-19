@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+BAT=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -n1)
+[ -z "$BAT" ] && exit 0          # equipo sin batería
+
+LEVELS=(20 10 5)                 # de mayor a menor
+INTERVAL=30
+last=""
+
+while true; do
+    cap=$(<"$BAT/capacity")
+    status=$(<"$BAT/status")
+
+    if [ "$status" = "Discharging" ]; then
+        # nivel más bajo que ya se alcanzó
+        target=""
+        for lvl in "${LEVELS[@]}"; do
+            [ "$cap" -le "$lvl" ] && target=$lvl
+        done
+
+        if [ -n "$target" ] && [ "$target" != "$last" ]; then
+            urgency=normal
+            [ "$target" -le 10 ] && urgency=critical
+            notify-send -u "$urgency" -a "battery-warn" \
+                "Batería baja" "Queda ${cap}%. Conecta el cargador."
+            last=$target
+        fi
+    else
+        last=""                  # al cargar, se reinicia el estado
+    fi
+
+    sleep "$INTERVAL"
+done
