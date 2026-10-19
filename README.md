@@ -80,7 +80,7 @@ Si usas un display manager en lugar de `startx`, el archivo equivalente suele se
 ## Instalación
 
 ```bash
-git clone https://github.com/USUARIO/battery-warn.git
+git clone https://github.com/ElkinAcevedo/battery-warn.git
 cd battery-warn
 
 mkdir -p ~/.local/bin ~/.config/systemd/user
