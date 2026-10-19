@@ -3,7 +3,7 @@
 BAT=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -n1)
 [ -z "$BAT" ] && exit 0          # equipo sin batería
 
-LEVELS=(20 10 5)                 # de mayor a menor
+LEVELS=(94 10 5)                 # de mayor a menor
 INTERVAL=30
 last=""
 
@@ -21,8 +21,8 @@ while true; do
         if [ -n "$target" ] && [ "$target" != "$last" ]; then
             urgency=normal
             [ "$target" -le 10 ] && urgency=critical
-            notify-send -u "$urgency" -a "battery-warn" \
-                "Batería baja" "Queda ${cap}%. Conecta el cargador."
+              notify-send -u "$urgency" -a "battery-warn" -i battery-caution -t 8000 \
+              "Batería baja" "Queda ${cap}%. Conecta el cargador."
             last=$target
         fi
     else
