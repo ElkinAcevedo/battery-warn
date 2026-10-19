@@ -1,0 +1,9 @@
+[Unit]
+Description=Aviso de batería baja
+
+[Service]
+ExecStart=%h/.local/bin/battery-warn
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
